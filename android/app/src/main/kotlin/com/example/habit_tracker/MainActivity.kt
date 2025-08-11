@@ -1,4 +1,4 @@
-package com.az3dynamics.habit_tracker
+package com.example.habit_tracker
 
 import io.flutter.embedding.android.FlutterActivity
 
