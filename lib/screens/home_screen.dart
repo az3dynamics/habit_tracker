@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/habit.dart';
+
 import 'package:habit_tracker/screens/add_habit_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   final List<Habit> _habits = [];
 
   void _addHabit() async {
@@ -43,6 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Habit Tracker'),
       ),
       body: ListView.builder(
+
         itemCount: _habits.length,
         itemBuilder: (context, index) {
           final habit = _habits[index];
@@ -65,11 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 _toggleHabitCompleted(habit);
               },
             ),
+
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
+
         onPressed: _addHabit,
+
         child: const Icon(Icons.add),
       ),
     );
