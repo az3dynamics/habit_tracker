@@ -1,23 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/habit.dart';
 
-class AddHabitScreen extends StatefulWidget {
-  const AddHabitScreen({super.key});
+class EditHabitScreen extends StatefulWidget {
+  final Habit habit;
+
+  const EditHabitScreen({super.key, required this.habit});
 
   @override
-  State<AddHabitScreen> createState() => _AddHabitScreenState();
+  State<EditHabitScreen> createState() => _EditHabitScreenState();
 }
 
-class _AddHabitScreenState extends State<AddHabitScreen> {
+class _EditHabitScreenState extends State<EditHabitScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _habitName = '';
-  String _habitTheme = '';
+  late TextEditingController _nameController;
+  late TextEditingController _themeController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.habit.name);
+    _themeController = TextEditingController(text: widget.habit.theme);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _themeController.dispose();
+    super.dispose();
+  }
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      final newHabit = Habit(name: _habitName, theme: _habitTheme);
-      Navigator.of(context).pop(newHabit);
+      final updatedHabit = widget.habit.copyWith(
+        name: _nameController.text,
+        theme: _themeController.text,
+      );
+      Navigator.of(context).pop(updatedHabit);
     }
   }
 
@@ -25,7 +43,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add a New Habit'),
+        title: const Text('Edit Habit'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -34,6 +52,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
           child: Column(
             children: [
               TextFormField(
+                controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Habit Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -41,11 +60,9 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) {
-                  _habitName = value!;
-                },
               ),
               TextFormField(
+                controller: _themeController,
                 decoration: const InputDecoration(labelText: 'Theme'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -53,14 +70,11 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   }
                   return null;
                 },
-                onSaved: (value) {
-                  _habitTheme = value!;
-                },
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submit,
-                child: const Text('Add Habit'),
+                child: const Text('Save Changes'),
               ),
             ],
           ),

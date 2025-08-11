@@ -3,7 +3,7 @@ class Habit {
   final String theme;
   final int streak;
   final bool isCompleted;
-  
+
   Habit({
     required this.name,
     required this.theme,
