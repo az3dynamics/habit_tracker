@@ -1,10 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:habit_tracker/main.dart';
+import 'package:habit_tracker/screens/home_screen.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:habit_tracker/services/auth_service.dart';
+import 'package:habit_tracker/services/database_service.dart';
+import 'package:provider/provider.dart';
 
 void main() {
+  Future<void> pumpWidgetWithProviders(WidgetTester tester, Widget widget) async {
+    final mockAuth = MockFirebaseAuth(signedIn: true);
+    final fakeFirestore = FakeFirebaseFirestore();
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          Provider<AuthService>(
+            create: (_) => AuthService(firebaseAuth: mockAuth),
+          ),
+          Provider<DatabaseService>(
+            create: (_) =>
+                DatabaseService(firestore: fakeFirestore, firebaseAuth: mockAuth),
+          ),
+        ],
+        child: MaterialApp(
+          home: widget,
+        ),
+      ),
+    );
+  }
+
   testWidgets('Add and track a new habit', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    await pumpWidgetWithProviders(tester, const HomeScreen());
     expect(find.text('Learn Flutter'), findsNothing);
 
     await tester.tap(find.byIcon(Icons.add));
@@ -33,7 +59,7 @@ void main() {
   });
 
   testWidgets('Edit an existing habit', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    await pumpWidgetWithProviders(tester, const HomeScreen());
 
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
@@ -59,7 +85,7 @@ void main() {
   });
 
   testWidgets('Delete a habit by swiping', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    await pumpWidgetWithProviders(tester, const HomeScreen());
 
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
