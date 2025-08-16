@@ -3,8 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:habit_tracker/models/habit.dart';
 
 class DatabaseService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db;
+  final FirebaseAuth _auth;
+
+  DatabaseService({FirebaseFirestore? firestore, FirebaseAuth? firebaseAuth})
+      : _db = firestore ?? FirebaseFirestore.instance,
+        _auth = firebaseAuth ?? FirebaseAuth.instance;
 
   User? get _currentUser => _auth.currentUser;
 
