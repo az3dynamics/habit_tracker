@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/models/habit.dart';
 
 class AddHabitScreen extends StatefulWidget {
   const AddHabitScreen({super.key});
@@ -16,8 +15,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   void _submit() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final newHabit = Habit(name: _habitName, theme: _habitTheme);
-      Navigator.of(context).pop(newHabit);
+      final result = {'name': _habitName, 'theme': _habitTheme};
+      Navigator.of(context).pop(result);
     }
   }
 

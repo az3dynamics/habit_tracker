@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/screens/home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:habit_tracker/screens/auth_wrapper.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      home: const AuthWrapper(),
     );
   }
 }
